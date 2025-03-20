@@ -1,0 +1,19 @@
+.homepage {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* Ensures the Navbar and content stack vertically */
+}
+
+.inside-homepage {
+  flex: 1;
+  display: flex;
+  min-height: 50vh;
+}
+
+.inside-homepage-content {
+  width: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: #f2edf3;
+}

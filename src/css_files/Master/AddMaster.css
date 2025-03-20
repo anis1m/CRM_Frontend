@@ -1,0 +1,23 @@
+.add-master {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #004d4d, #008080);
+  color: white;
+}
+
+.add-master:hover {
+  background: linear-gradient(135deg, #008080, #004d4d);
+  transform: scale(1.05);
+  box-shadow: 2px 4px 15px rgba(0, 128, 128, 0.3);
+}

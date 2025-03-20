@@ -1,0 +1,140 @@
+.quotation-master {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  /* border-radius: 8px; */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.quotation-master h1 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.quotation-master-forms {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.quotation-master-forms button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.quotation-master-forms button:hover {
+  background-color: #0056b3;
+}
+
+.add-quotation-master {
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 1rem;
+  gap: 12px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* Centering */
+  position: relative;
+  left: 29%;
+}
+
+.add-quotation-master label {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.add-quotation-master input,
+.add-quotation-master select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-quotation-master button {
+  background-color: #28a745;
+  color: white;
+  width: 200px;
+  margin-left: 25%;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-quotation-master button:hover {
+  background-color: #218838;
+}
+
+.close-btn {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.close-btn:hover {
+  background: darkred;
+}
+
+/* .table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #333;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+} */
+
+button.generate-invoice {
+  background-color: #ffc107;
+  color: black;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.generate-invoice:hover {
+  background-color: #e0a800;
+}

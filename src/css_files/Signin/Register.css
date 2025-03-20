@@ -1,0 +1,60 @@
+.register {
+  width: 90%;
+  margin: 0 auto;
+  border: 1px solid black;
+  padding: 1rem 1.5rem;
+  background-color: whitesmoke;
+  border-radius: 15px;
+}
+
+.register form {
+  width: 100%;
+  display: grid; /* Change to grid layout */
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 1rem; /* Space between rows and columns */
+  margin: 1rem 0;
+}
+
+.register form h1 {
+  grid-column: span 2; /* Make the heading span both columns */
+  font-size: 2rem;
+  text-align: center;
+}
+
+.register form blockquote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.register form blockquote input {
+  border: 1px solid white;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.register form button {
+  grid-column: span 2; /* Make the button span both columns */
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background-color: #0089ce;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 8px;
+}
+
+.register form mark {
+  width: 100%;
+  display: flex;
+}
+
+.register p {
+  text-align: center;
+  margin: 0.5rem 0;
+  font-size: 16px;
+}

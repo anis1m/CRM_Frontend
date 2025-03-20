@@ -1,0 +1,92 @@
+.navbar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+#navbar-logo {
+  height: 40px;
+}
+
+.company-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  color: #333;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Increase spacing between icons */
+}
+
+.navbar-icon {
+  display: flex;
+  flex-direction: column; /* Stack icon and text vertically */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* Add colors to specific icons */
+.navbar-icon:nth-child(1) i {
+  color: #007bff; /* Blue for Dashboard */
+}
+
+.navbar-icon:nth-child(2) i {
+  color: #ff9800; /* Orange for Inquiries */
+}
+
+.navbar-icon:nth-child(3) i {
+  color: #4caf50; /* Green for Companies */
+}
+
+.navbar-icon:nth-child(4) i {
+  color: #9c27b0; /* Purple for Products */
+}
+
+.navbar-icon:nth-child(5) i {
+  color: #ffc107; /* Yellow for Vendors */
+}
+
+.navbar-icon:nth-child(6) i {
+  color: #f44336; /* Red for Users */
+}
+
+.navbar-icon:nth-child(7) i {
+  color: #00bcd4; /* Cyan for Dealers */
+}
+
+/* Add hover effect */
+.navbar-icon:hover i {
+  transform: scale(1.05); /* Slightly enlarge the icon */
+  color: #555; /* Darker shade on hover */
+}
+
+.navbar-icon i {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem; /* Add spacing below the icon */
+}
+
+.navbar-icon span {
+  font-size: 0.7rem;
+  font-weight: 550;
+}

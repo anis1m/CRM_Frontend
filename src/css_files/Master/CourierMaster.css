@@ -1,0 +1,18 @@
+.courier-master {
+  width: 100%;
+  text-align: center;
+  padding: 2rem 0;
+  background-color: white;
+}
+
+.courier-master h1 {
+  font-size: 2.5rem;
+}
+
+.courier-master-forms {
+  margin: 1rem auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: fit-content;
+}

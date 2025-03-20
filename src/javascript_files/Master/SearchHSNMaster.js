@@ -1,0 +1,105 @@
+import React, { useEffect, useState } from "react";
+import "../../css_files/Master/SearchHSNMaster.css";
+import CloseForm from "./CloseForm";
+import axios from "axios";
+import { toast } from "react-toastify";
+import getCookie from "../../api";
+
+function SearchHSNMaster({
+  setshowsearchform,
+  setsearchedtabledata,
+  setfilterbutton,
+  activatedfilters,
+  setactivatedfilters,
+}) {
+  const [searchData, setSearchData] = useState({
+    Id: 0,
+    HsnCode: 0,
+  });
+
+  useEffect(() => {
+    if (activatedfilters.length >= 0) {
+      setSearchData((prev) => ({
+        ...prev,
+        Id: activatedfilters.includes("Id") ? prev.Id : 0,
+        Name: activatedfilters.includes("Name") ? prev.Name : "",
+        Code: activatedfilters.includes("Code") ? prev.Code : "",
+      }));
+    }
+  }, [activatedfilters]);
+
+  function handleSearch(e) {
+    e.preventDefault();
+    const url = `${process.env.REACT_APP_API_URL}/api/v1/HSN/GetHSNByIdOrCode?id=${searchData.Id}&HsnCode=${searchData.HsnCode}`;
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      })
+      .then((res) => {
+        setactivatedfilters([]);
+        console.log(res);
+
+        setsearchedtabledata(res.data);
+        if (searchData.Id === 0) {
+          setactivatedfilters((prev) => {
+            const arr = [...prev];
+            arr.push("HsnCode");
+            return arr;
+          });
+        } else if (searchData.HsnCode === 0) {
+          setactivatedfilters((prev) => {
+            const arr = [...prev];
+            arr.push("Id");
+            return arr;
+          });
+        } else {
+          setactivatedfilters((prev) => {
+            const arr = [...prev];
+            arr.push("Id");
+            arr.push("HsnCode");
+            return arr;
+          });
+        }
+
+        setfilterbutton(true);
+        toast.success("Fetched", {
+          position: "bottom-center",
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.error, {
+          position: "bottom-center",
+        });
+      });
+  }
+  return (
+    <form className="search-hsn-master-form" onSubmit={handleSearch}>
+      <h3>Search HSN Master By Entering at least One Field</h3>
+      <blockquote>
+        <label>Id</label>
+        <input
+          type="number"
+          placeholder="Enter HSN Master Id"
+          onChange={(e) => setSearchData({ ...searchData, Id: e.target.value })}
+        />
+      </blockquote>
+      <blockquote>
+        <label>HSN Code</label>
+        <input
+          type="number"
+          placeholder="Enter HSN Code"
+          onChange={(e) =>
+            setSearchData({ ...searchData, HsnCode: e.target.value })
+          }
+        />
+      </blockquote>
+      <button type="submit">Search</button>
+      <CloseForm close={setshowsearchform} />
+    </form>
+  );
+}
+
+export default SearchHSNMaster;
