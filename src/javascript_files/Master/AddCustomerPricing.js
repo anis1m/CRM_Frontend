@@ -82,11 +82,7 @@ function AddCustomerPricingMaster({
             })
             .then((res) => {
               console.log(res.data);
-              setCustomerPricingDropdowns((prev) => {
-                const arr = [...prev];
-                arr.push(res.data[0]);
-                return arr;
-              });
+
               setshowaddform(false);
               setReload(!reload);
             })
