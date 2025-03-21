@@ -108,23 +108,23 @@ function AddPartsMaster({
           URL,
           {
             id: partsupdatedata.id,
-            partNumber: partsData.PartNumber,
-            name: partsData.Name,
-            description: partsData.Description,
-            supplyType: partsData.SupplyType,
-            sellingPrice: partsData.SellingPrice,
-            weight: partsData.Weight,
-            dimensions:
+            PartNumber: partsData.PartNumber,
+            Name: partsData.Name,
+            Description: partsData.Description,
+            SupplyType: partsData.SupplyType,
+            SellingPrice: partsData.SellingPrice,
+            Weight: partsData.Weight,
+            Dimensions:
               partsData.Length +
               "x" +
               partsData.Breadth +
               "x" +
               partsData.Height,
-            materialOfConstruction: partsData.MaterialOfConstruction,
-            unitId: partsData.UnitId,
-            gstId: partsData.GSTId,
-            hsnDetailsId: partsData.HSNDetailsId,
-            packingId: partsData.PackingId,
+            MaterialOfConstruction: partsData.MaterialOfConstruction,
+            UnitId: partsData.UnitId,
+            GSTId: partsData.GSTId,
+            HSNDetailsId: partsData.HSNDetailsId,
+            PackingId: partsData.PackingId,
           },
           {
             headers: {

@@ -40,27 +40,28 @@ function CustomerMaster() {
 
   async function setsearchedtabledata(tabledata) {
     setTableData([]);
-    const tablearr = [];
-    tablearr.push(tabledata.id);
-    tablearr.push(tabledata.orgName);
-    tablearr.push(tabledata.description);
-    try {
-      const addr = await fetchaddressesbycustomerid(tabledata.id);
-      const contacts = await fetchcontactdatabycustomerid(tabledata.id);
-      const customerboiler = await fetchcustomerboilerdatabycustomerid(
-        tabledata.id
-      );
+    for (let i = 0; i < tabledata.length; i++) {
+      const tablearr = [];
+      tablearr.push(tabledata[i].id);
+      tablearr.push(tabledata[i].orgName);
+      tablearr.push(tabledata[i].description);
+      try {
+        const addr = await fetchaddressesbycustomerid(tabledata[i].id);
+        const contacts = await fetchcontactdatabycustomerid(tabledata[i].id);
+        const customerboiler = await fetchcustomerboilerdatabycustomerid(
+          tabledata[i].id
+        );
 
-      tablearr.push(addr, contacts, customerboiler);
-    } catch (err) {
-      tablearr.push("", "", "");
+        tablearr.push(addr, contacts, customerboiler);
+      } catch (err) {
+        tablearr.push("", "", "");
+      }
+      setTableData((prev) => {
+        const arr = [...prev];
+        arr.push(tablearr);
+        return arr;
+      });
     }
-    setTableData((prev) => {
-      const arr = [...prev];
-      arr.push(tablearr);
-      return arr;
-    });
-    setshowsearchform(false);
   }
 
   async function fetchcustomerdata(customerid) {
@@ -75,7 +76,7 @@ function CustomerMaster() {
     try {
       const responses = await Promise.allSettled([
         axios.get(
-          `${baseURL}/api/v1/Customer/GetCustomerById?id=${customerid}`,
+          `${baseURL}/api/v1/Customer/GetCustomerByIdOrName?id=${customerid}`,
           { headers: { Authorization: token } }
         ),
         axios.get(
@@ -91,9 +92,10 @@ function CustomerMaster() {
           { headers: { Authorization: token } }
         ),
       ]);
+      console.log(responses[0]);
 
       setcustomerupdatedata(
-        responses[0].status === "fulfilled" ? responses[0].value.data : null
+        responses[0].status === "fulfilled" ? responses[0].value.data[0] : null
       );
       setcustomeraddressupdatedata(
         responses[1].status === "fulfilled" ? responses[1].value.data : []
@@ -256,6 +258,8 @@ function CustomerMaster() {
           setshowsearchform={setshowsearchform}
           setsearchedtabledata={setsearchedtabledata}
           setfilterbutton={setfilterbutton}
+          setactivatedfilters={setactivatedfilters}
+          activatedfilters={activatedfilters}
         />
       )}
       <Table

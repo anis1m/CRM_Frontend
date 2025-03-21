@@ -36,6 +36,7 @@ function AddBoilerSeriesPartsMappingMaster({
     BoilerHead: "",
     SeriesCode: "",
   });
+  const [clearpartsSearch, setClearPartsSearch] = useState(false);
 
   useEffect(() => {
     if (triggerupdate) {
@@ -181,7 +182,7 @@ function AddBoilerSeriesPartsMappingMaster({
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [clearpartsSearch]);
 
   useEffect(() => {
     const url = `${process.env.REACT_APP_API_URL}/api/v1/BoilerPartsMapper/GetAllBoilersFromBoilerPartsMapper`;
@@ -288,9 +289,37 @@ function AddBoilerSeriesPartsMappingMaster({
       </blockquote>
       <blockquote>
         <label>Display All Parts</label>
+        <input
+          type="search"
+          placeholder="Search Parts by Name"
+          style={{ width: "fit-content" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const url = `${process.env.REACT_APP_API_URL}/api/v1/Parts/GetPartsByIdAndName?name=${e.target.value}`;
+              axios
+                .get(url, {
+                  headers: {
+                    Authorization: `Bearer ${getCookie("token")}`,
+                  },
+                })
+                .then((res) => {
+                  console.log(res.data);
+                  setPartsData(res.data);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          }}
+          onInput={(e) => {
+            if (e.target.value === "") {
+              setClearPartsSearch(!clearpartsSearch);
+            }
+          }}
+        />
         <blockquote
           id="partsCheckboxesinBoilerSeriesPartsMapping"
-          style={{ overflowY: "scroll", maxHeight: "200px" }}
+          style={{ overflowY: "scroll", maxHeight: "500px" }}
         >
           {partsData.map((part) => (
             <mark>

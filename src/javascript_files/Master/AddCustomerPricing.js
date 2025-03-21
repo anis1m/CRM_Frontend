@@ -13,31 +13,12 @@ function AddCustomerPricingMaster({
   setReload,
   triggerupdate,
   customerpricingupdatedata,
-  customerPricingDropdowns,
-  setCustomerPricingDropdowns,
 }) {
-  const [pricingrate, setpricingrate] = useState(0);
   const [customerPricingData, setCustomerPricingData] = useState({
     Code: triggerupdate ? customerpricingupdatedata?.code : "",
     Percentage: triggerupdate ? customerpricingupdatedata?.percentage : "",
     Description: triggerupdate ? customerpricingupdatedata?.description : "",
   });
-
-  useEffect(() => {
-    if (triggerupdate === false) {
-      setCustomerPricingData({
-        ...customerPricingData,
-        Percentage:
-          parseFloat(customerPricingData.Percentage) + parseFloat(pricingrate) >
-          100.0
-            ? 100.0
-            : (
-                parseFloat(customerPricingData.Percentage) +
-                parseFloat(pricingrate)
-              ).toFixed(2),
-      });
-    }
-  }, [triggerupdate, pricingrate]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -174,19 +155,15 @@ function AddCustomerPricingMaster({
             }}
           />
         </blockquote>
-        {customerPricingDropdowns.length > 0 && (
-          <blockquote>
-            <label>Customer Pricing Dropdown</label>
-            <select onChange={(e) => setpricingrate(e.target.value)}>
-              <option value="">Select Customer Code</option>
-              {customerPricingDropdowns.map((customerpricing) => (
-                <option value={customerpricing.percentage}>
-                  {customerpricing.code}
-                </option>
-              ))}
-            </select>
-          </blockquote>
-        )}
+        <blockquote>
+          <label>Customer Pricing Discount</label>
+          <select>
+            <option value="">Select Customer Pricing Discount</option>
+            <option>A (50%)</option>
+            <option>B (25%)</option>
+            <option>C (10%)</option>
+          </select>
+        </blockquote>
       </aside>
       <blockquote>
         <label>Description (Upto 200 Characters)</label>

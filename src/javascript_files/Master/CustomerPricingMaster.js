@@ -24,7 +24,6 @@ function CustomerPricingMaster() {
   const { setExpiredSession } = useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
-  const [customerPricingDropdowns, setCustomerPricingDropdowns] = useState([]);
 
   function setsearchedtabledata(tabledata) {
     setTableData([]);
@@ -121,8 +120,6 @@ function CustomerPricingMaster() {
           triggerupdate={triggerupdate}
           customerpricingupdatedata={customerpricingupdatedata}
           key={`${customerpricingupdatedata?.id}-${triggerupdate}-${datareload}`}
-          setCustomerPricingDropdowns={setCustomerPricingDropdowns}
-          customerPricingDropdowns={customerPricingDropdowns}
         />
       )}
       {showsearchform && (

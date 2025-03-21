@@ -142,7 +142,7 @@ function AddCustomerMaster({
             .post(
               contacturl,
               {
-                id: customercontactupdatedata.id,
+                id: customercontactupdatedata[0].id,
                 CustomerId: response.data.id,
                 POC: customerContact.POC,
                 PhoneNumbers: customerphonenumberdata
@@ -167,7 +167,7 @@ function AddCustomerMaster({
               .post(
                 addressurl,
                 {
-                  id: customeraddressupdatedata.id,
+                  id: customeraddressupdatedata[i].id,
                   CustomerId: response.data.id,
                   Area: customeraddressdata[i].area,
                   City: customeraddressdata[i].city,
@@ -194,7 +194,7 @@ function AddCustomerMaster({
               .post(
                 boilerurl,
                 {
-                  id: customerboilerupdatedata.id,
+                  id: customerboilerupdatedata[i].id,
                   CustomerId: response.data.id,
                   BoilerHead: customerboilerdata[i].boilerHead,
                   BoilerSeries: customerboilerdata[i].boilerSeries,
