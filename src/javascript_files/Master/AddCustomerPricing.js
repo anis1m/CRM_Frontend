@@ -72,6 +72,8 @@ function AddCustomerPricingMaster({
           toast.success("Record Added Successfully", {
             position: "bottom-center",
           });
+          setshowaddform(false);
+          setReload(!reload);
         })
         .catch((error) => {
           console.error(error);
