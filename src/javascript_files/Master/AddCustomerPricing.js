@@ -29,9 +29,9 @@ function AddCustomerPricingMaster({
           url,
           {
             id: customerpricingupdatedata.id,
-            code: customerPricingData.Code,
-            percentage: customerPricingData.Percentage,
-            description: customerPricingData.Description,
+            Code: customerPricingData.Code,
+            Percentage: customerPricingData.Percentage,
+            Description: customerPricingData.Description,
           },
           {
             headers: {
@@ -72,23 +72,6 @@ function AddCustomerPricingMaster({
           toast.success("Record Added Successfully", {
             position: "bottom-center",
           });
-
-          const url = `${process.env.REACT_APP_API_URL}/api/v1/CustomerPricing/GetCustomerPricingByIdOrCodeOrPercentage?id=${response.data.id}`;
-          axios
-            .get(url, {
-              headers: {
-                Authorization: `Bearer ${getCookie("token")}`,
-              },
-            })
-            .then((res) => {
-              console.log(res.data);
-
-              setshowaddform(false);
-              setReload(!reload);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
         })
         .catch((error) => {
           console.error(error);

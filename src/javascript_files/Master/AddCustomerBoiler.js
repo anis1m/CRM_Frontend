@@ -50,7 +50,7 @@ function AddCustomerBoiler({
   }, [customerboilerdata]);
 
   return (
-    <div className="add-customer-address">
+    <form className="add-customer-address">
       <blockquote style={{ flexDirection: "row", alignItems: "center" }}>
         <p>Customer Boiler</p>
         <button
@@ -135,7 +135,7 @@ function AddCustomerBoiler({
           ))}
         </select>
       </blockquote>
-    </div>
+    </form>
   );
 }
 

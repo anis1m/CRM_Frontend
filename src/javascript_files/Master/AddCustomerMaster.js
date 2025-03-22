@@ -115,8 +115,7 @@ function AddCustomerMaster({
     }
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     if (triggerupdate) {
       const URL = `${process.env.REACT_APP_API_URL}/api/v1/Customer/UpdateCustomerCommand`;
       axios
@@ -335,7 +334,25 @@ function AddCustomerMaster({
     }
   }
   return (
-    <form className="add-customer-master" onSubmit={handleSubmit}>
+    <form
+      className="add-customer-master"
+      onSubmit={(e) => {
+        e.preventDefault();
+        let isValid = true;
+        const addresses = document.getElementsByClassName(
+          "add-customer-address"
+        );
+        for (let i = 0; i < addresses.length; i++) {
+          if (!addresses[i].checkValidity()) {
+            addresses[i].reportValidity();
+            isValid = false;
+          }
+        }
+        if (isValid) {
+          handleSubmit();
+        }
+      }}
+    >
       <blockquote>
         <label>Organization/Company Name</label>
         <input

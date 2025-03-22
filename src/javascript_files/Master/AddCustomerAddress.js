@@ -9,7 +9,7 @@ function AddCustomerAddress({
   setaddresscurrentcount,
 }) {
   return (
-    <div className="add-customer-address">
+    <form className="add-customer-address">
       <blockquote style={{ flexDirection: "row", alignItems: "center" }}>
         <p>Customer Address</p>
         <button
@@ -162,7 +162,7 @@ function AddCustomerAddress({
           required
         />
       </blockquote>
-    </div>
+    </form>
   );
 }
 
