@@ -82,24 +82,11 @@ function Register() {
           />
         </blockquote>
 
-        {/*<blockquote>
+        <blockquote>
           <label>Confirm Password</label>
-          <input
-            type="password"
-            placeholder="Enter Password Again"
-            onInput={(e) => {
-              if (data.HashPassword != e.target.value) {
-                passwordconfirmref.current.textContent =
-                  "Password does not match";
-              } else {
-                passwordconfirmref.current.textContent = "";
-              }
-            }}
-          />
+          <input type="password" placeholder="Enter Password Again" />
         </blockquote>
-        <span style={{ color: "red" }} ref={passwordconfirmref}>
-          {"  "}
-        </span>*/}
+
         <button type="submit">Register</button>
       </form>
 
