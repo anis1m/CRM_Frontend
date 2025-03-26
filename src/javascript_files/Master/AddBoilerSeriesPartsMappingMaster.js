@@ -36,7 +36,6 @@ function AddBoilerSeriesPartsMappingMaster({
     BoilerHead: "",
     SeriesCode: "",
   });
-  const [clearpartsSearch, setClearPartsSearch] = useState(false);
 
   useEffect(() => {
     if (triggerupdate) {
@@ -168,23 +167,6 @@ function AddBoilerSeriesPartsMappingMaster({
   }
 
   useEffect(() => {
-    const URL = `${process.env.REACT_APP_API_URL}/api/v1/Parts`;
-    axios
-      .get(URL, {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setPartsData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [clearpartsSearch]);
-
-  useEffect(() => {
     const url = `${process.env.REACT_APP_API_URL}/api/v1/BoilerPartsMapper/GetAllBoilersFromBoilerPartsMapper`;
     axios
       .get(url, {
@@ -293,28 +275,22 @@ function AddBoilerSeriesPartsMappingMaster({
           type="search"
           placeholder="Search Parts by Name"
           style={{ width: "fit-content" }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const url = `${process.env.REACT_APP_API_URL}/api/v1/Parts/GetPartsByIdAndName?name=${e.target.value}`;
-              axios
-                .get(url, {
-                  headers: {
-                    Authorization: `Bearer ${getCookie("token")}`,
-                  },
-                })
-                .then((res) => {
-                  console.log(res.data);
-                  setPartsData(res.data);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          }}
           onInput={(e) => {
-            if (e.target.value === "") {
-              setClearPartsSearch(!clearpartsSearch);
-            }
+            setPartsData([]);
+            const url = `${process.env.REACT_APP_API_URL}/api/v1/Parts/GetPartsByIdAndName?name=${e.target.value}`;
+            axios
+              .get(url, {
+                headers: {
+                  Authorization: `Bearer ${getCookie("token")}`,
+                },
+              })
+              .then((res) => {
+                console.log(res.data);
+                setPartsData(res.data);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }}
         />
         <blockquote

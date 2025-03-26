@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import "../../css_files/Master/AddCustomerPricingMaster.css";
 import CloseForm from "./CloseForm";
@@ -91,60 +91,111 @@ function AddCustomerPricingMaster({
         });
     }
   }
+  const [showextratextbox, setshowextratextbox] = useState(false);
+
   return (
     <form className="add-customer-pricing-master" onSubmit={handleSubmit}>
-      <blockquote>
-        <label>Customer Code</label>
-        <input
-          type="number"
-          placeholder="Enter Customer Code"
-          value={customerPricingData.Code}
-          onChange={(e) =>
-            setCustomerPricingData({
-              ...customerPricingData,
-              Code: e.target.value,
-            })
-          }
-          onInput={(e) => {
-            e.target.value = e.target.value.slice(0, 9);
-          }}
-        />
-      </blockquote>
       <aside>
         <blockquote>
-          <label>Rate</label>
+          <label>Discount Code</label>
+          <select
+            onChange={(e) => {
+              setCustomerPricingData({
+                ...customerPricingData,
+                Code: e.target.value,
+              });
+              if (e.target.value === "C") {
+                setshowextratextbox(true);
+              } else {
+                setshowextratextbox(false);
+              }
+              if (e.target.value === "A") {
+                setCustomerPricingData({
+                  ...customerPricingData,
+                  Percentage: 0,
+                });
+              } else if (e.target.value === "") {
+                setCustomerPricingData({
+                  ...customerPricingData,
+                  Percentage: "",
+                });
+              }
+            }}
+            required
+          >
+            <option value="">Select Discount Code</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </blockquote>
+        <blockquote>
+          <label>Rate (Percentage)</label>
           <input
             type="text"
             placeholder="Enter Rate"
+            readOnly={customerPricingData.Code === "B" ? false : true}
             value={customerPricingData.Percentage}
-            onChange={(e) =>
+            onChange={(e) => {
               setCustomerPricingData({
                 ...customerPricingData,
-                Percentage: e.target.value,
-              })
-            }
+                Percentage: e.target.value > 100.0 ? 100.0 : e.target.value,
+              });
+            }}
+            required
             onInput={(e) => {
               e.target.value = e.target.value
                 .replace(/[^0-9.]/g, "")
                 .replace(/^(\d{3,})\d/g, "$1")
                 .replace(/(\..*?)\./g, "$1")
                 .replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
-
-              if (parseFloat(e.target.value) > 100) {
-                e.target.value = "100.00";
-              }
             }}
           />
         </blockquote>
-        <blockquote>
-          <label>Customer Pricing Discount</label>
-          <select>
-            <option value="">Select Customer Pricing Discount</option>
-            <option>A (50%)</option>
-            <option>B (25%)</option>
-            <option>C (10%)</option>
-          </select>
-        </blockquote>
+        {showextratextbox && (
+          <blockquote>
+            <label>Rate (Percentage)</label>
+            <input
+              type="text"
+              placeholder="Enter Rate"
+              onInput={(e) => {
+                e.target.value = e.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/^(\d{3,})\d/g, "$1")
+                  .replace(/(\..*?)\./g, "$1")
+                  .replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
+
+                if (parseFloat(e.target.value) > 100) {
+                  e.target.value = "100.00";
+                }
+              }}
+              readOnly={customerPricingData.Percentage === "" ? true : false}
+              onChange={(e) => {
+                if (e.target.value === "") {
+                  setCustomerPricingData({
+                    ...customerPricingData,
+                    Percentage: 0,
+                  });
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setCustomerPricingData({
+                    ...customerPricingData,
+                    Percentage:
+                      parseFloat(customerPricingData.Percentage) +
+                        parseFloat(e.target.value) >
+                      100.0
+                        ? 100.0
+                        : parseFloat(customerPricingData.Percentage) +
+                          parseFloat(e.target.value),
+                  });
+                }
+              }}
+              required
+            />
+          </blockquote>
+        )}
       </aside>
       <blockquote>
         <label>Description (Upto 200 Characters)</label>

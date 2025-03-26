@@ -1,4 +1,4 @@
-#close-add-category-master-form {
+#close-form-button {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -12,6 +12,6 @@
   cursor: pointer;
 }
 
-#close-add-category-master-form i {
+#close-form-button i {
   font-size: 2rem;
 }

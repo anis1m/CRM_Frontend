@@ -21,6 +21,8 @@ import Signin from "./javascript_files/Signin/Signin";
 import Login from "./javascript_files/Signin/Login";
 import Register from "./javascript_files/Signin/Register";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Users from "./javascript_files/Admin/Users.js";
+import RoleManagement from "./javascript_files/Admin/RoleManagement.js";
 
 function App() {
   return (
@@ -59,6 +61,8 @@ function App() {
           element={<CustomerPricingMaster />}
         />
         <Route path="master/quotation-master" element={<QuotationMaster />} />
+        <Route path="admin/users" element={<Users />} />
+        <Route path="admin/roles" element={<RoleManagement />} />
       </Route>
     </Routes>
   );

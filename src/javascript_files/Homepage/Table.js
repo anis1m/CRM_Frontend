@@ -23,6 +23,7 @@ function Table({
   activatedfilters,
   setactivatedfilters,
   setshowsearchform,
+  setshowmorecustomerdata,
 }) {
   const { triggerscrollupwords } = useContext(triggerscroll);
 
@@ -107,7 +108,19 @@ function Table({
             <tr key={index}>
               {data.map((tdata, idx) => (
                 <td key={idx}>
-                  <p>{tdata}</p>
+                  {tdata === "Tap here to See More Details" ? (
+                    <a
+                      href="#"
+                      onClick={() => {
+                        setshowmorecustomerdata(true);
+                        fetchdata(tabledata[index][0]);
+                      }}
+                    >
+                      {tdata}
+                    </a>
+                  ) : (
+                    <p>{tdata}</p>
+                  )}
                 </td>
               ))}
               <td>

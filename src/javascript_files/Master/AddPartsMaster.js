@@ -211,14 +211,14 @@ function AddPartsMaster({
       <blockquote>
         <label>Part Number</label>
         <input
-          type="number"
+          type="text"
           placeholder="Enter Part Number"
           value={partsData.PartNumber}
           onChange={(e) =>
             setPartsData({ ...partsData, PartNumber: e.target.value })
           }
           onInput={(e) => {
-            e.target.value = e.target.value.slice(0, 9);
+            e.target.value = e.target.value.slice(0, 10);
           }}
         />
       </blockquote>

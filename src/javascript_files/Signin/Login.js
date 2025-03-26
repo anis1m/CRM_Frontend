@@ -27,7 +27,7 @@ function Login() {
         setTimeout(() => {
           nav("/dashboard");
           setloading(false);
-        }, 3000);
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);

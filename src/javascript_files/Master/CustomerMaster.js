@@ -9,18 +9,12 @@ import getCookie from "../../api";
 import { triggerscroll } from "../Homepage/Homepage";
 import AddMaster from "./AddMaster";
 import SearchMaster from "./SearchMaster";
+import MoreCustomerMasterDetails from "./MoreCustomerMasterDetails";
 
 function CustomerMaster() {
   const [showaddform, setshowaddform] = useState(false);
   const [showsearchform, setshowsearchform] = useState(false);
-  const tablehead = [
-    "Id",
-    "Name",
-    "Description",
-    "Addresses",
-    "Contact Centres",
-    "Customer Boilers",
-  ];
+  const tablehead = ["Id", "Name", "Description", ""];
   const [tabledata, setTableData] = useState([]);
   const [reload, setReload] = useState(false);
   const [triggerupdate, settriggerupdate] = useState(false);
@@ -37,6 +31,8 @@ function CustomerMaster() {
   const { setExpiredSession } = useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
+  const [showmorecustomerdata, setshowmorecustomerdata] = useState(false);
+  const [moredetailsloading, setmoredetailsloading] = useState(false);
 
   async function setsearchedtabledata(tabledata) {
     setTableData([]);
@@ -45,17 +41,7 @@ function CustomerMaster() {
       tablearr.push(tabledata[i].id);
       tablearr.push(tabledata[i].orgName);
       tablearr.push(tabledata[i].description);
-      try {
-        const addr = await fetchaddressesbycustomerid(tabledata[i].id);
-        const contacts = await fetchcontactdatabycustomerid(tabledata[i].id);
-        const customerboiler = await fetchcustomerboilerdatabycustomerid(
-          tabledata[i].id
-        );
 
-        tablearr.push(addr, contacts, customerboiler);
-      } catch (err) {
-        tablearr.push("", "", "");
-      }
       setTableData((prev) => {
         const arr = [...prev];
         arr.push(tablearr);
@@ -65,6 +51,7 @@ function CustomerMaster() {
   }
 
   async function fetchcustomerdata(customerid) {
+    setmoredetailsloading(true);
     setcustomerupdatedata(null);
     setcustomeraddressupdatedata([]);
     setcustomerboilerupdatedata([]);
@@ -92,7 +79,6 @@ function CustomerMaster() {
           { headers: { Authorization: token } }
         ),
       ]);
-      console.log(responses[0]);
 
       setcustomerupdatedata(
         responses[0].status === "fulfilled" ? responses[0].value.data[0] : null
@@ -112,8 +98,10 @@ function CustomerMaster() {
           console.error(`API ${index + 1} failed:`, res.reason);
         }
       });
+      setmoredetailsloading(false);
     } catch (error) {
       console.error("Unexpected error fetching customer data:", error);
+      setmoredetailsloading(false);
     }
   }
 
@@ -127,31 +115,19 @@ function CustomerMaster() {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       })
-      .then(async (response) => {
-        const customers = response.data;
-        const customerPromises = customers.map(async (customer) => {
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
           const data = [];
-          data.push(customer.id);
-          data.push(customer.orgName);
-          data.push(customer.description);
-          try {
-            const addr = await fetchaddressesbycustomerid(customer.id);
-            const contacts = await fetchcontactdatabycustomerid(customer.id);
-            const customerboiler = await fetchcustomerboilerdatabycustomerid(
-              customer.id
-            );
-            data.push(addr);
-            data.push(contacts);
-            data.push(customerboiler);
-          } catch (err) {
-            data.push("", "", "");
-          }
-
-          return data;
-        });
-
-        const tableData = await Promise.all(customerPromises);
-        setTableData(tableData);
+          data.push(response.data[i].id);
+          data.push(response.data[i].orgName);
+          data.push(response.data[i].description);
+          data.push("Tap here to See More Details");
+          setTableData((prev) => {
+            const arr = [...prev];
+            arr.push(data);
+            return arr;
+          });
+        }
         setloading(false);
       })
       .catch((error) => {
@@ -162,65 +138,6 @@ function CustomerMaster() {
         }
       });
   }, [reload]);
-
-  function fetchaddressesbycustomerid(customerid) {
-    const url = `${process.env.REACT_APP_API_URL}/api/v1/Addresses/GetAdressByCustomerId?CustomerId=${customerid}`;
-    return axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      })
-      .then((res) => {
-        const addressString = res.data.map(
-          (item) =>
-            `{ Area: ${item.area}, City: ${item.city}, Pincode: ${item.pincode}, State: ${item.state} } `
-        );
-
-        return addressString;
-      })
-      .catch((err) => {
-        return "";
-      });
-  }
-
-  function fetchcontactdatabycustomerid(customerid) {
-    const url = `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres/GetContactCenterByCustomerId?CustomerId=${customerid}`;
-    return axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      })
-      .then((res) => {
-        const contactString = `POC: ${res.data[0].poc}, PhoneNumbers: ${res.data[0].phoneNumbers}`;
-        return contactString;
-      })
-      .catch((err) => {
-        return "";
-      });
-  }
-
-  function fetchcustomerboilerdatabycustomerid(customerid) {
-    const url = `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers/GetCustomerBoilerByCustomerId?CustomerId=${customerid}`;
-    return axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      })
-      .then((res) => {
-        const customerBoilerString = res.data.map(
-          (item) =>
-            `{ BoilerHead: ${item.boilerHead}, SeriesCode: ${item.boilerSeries} } `
-        );
-
-        return customerBoilerString;
-      })
-      .catch((err) => {
-        return "";
-      });
-  }
 
   return (
     <section className="customer-master">
@@ -279,7 +196,18 @@ function CustomerMaster() {
         activatedfilters={activatedfilters}
         setactivatedfilters={setactivatedfilters}
         setshowsearchform={setshowsearchform}
+        setshowmorecustomerdata={setshowmorecustomerdata}
       />
+      {showmorecustomerdata && (
+        <MoreCustomerMasterDetails
+          setshowmorecustomerdata={setshowmorecustomerdata}
+          customerupdatedata={customerupdatedata}
+          customeraddressupdatedata={customeraddressupdatedata}
+          customerboilerupdatedata={customerboilerupdatedata}
+          customercontactupdatedata={customercontactupdatedata}
+          loading={moredetailsloading}
+        />
+      )}
     </section>
   );
 }

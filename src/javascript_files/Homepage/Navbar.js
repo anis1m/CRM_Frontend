@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import getCookie from "../../api";
 import axios from "axios";
 
-function Navbar({ expiredSession }) {
+function Navbar({ expiredSession, setshowchangepasswordform }) {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const detailref = useRef();
@@ -70,7 +70,7 @@ function Navbar({ expiredSession }) {
             <i className="fa-solid fa-envelope"></i>
             <span>INQUIRIES</span>
           </button>
-          {userData && userData.role === "admin" && (
+          {userData && userData.role === "Administrator" && (
             <>
               <button
                 className="navbar-icon"
@@ -95,31 +95,33 @@ function Navbar({ expiredSession }) {
               </button>
               <button
                 className="navbar-icon"
-                onClick={() => navigate("/users")}
+                onClick={() => navigate("admin/users")}
               >
-                <i className="fa-solid fa-user"></i>
+                <i class="fa-solid fa-users"></i>
                 <span>Users</span>
               </button>
               <button
                 className="navbar-icon"
-                onClick={() => navigate("/dealers")}
+                onClick={() => navigate("admin/roles")}
               >
-                <i className="fa-solid fa-users"></i>
-                <span>Dealers</span>
+                <i class="fa-solid fa-user-tie"></i>
+                <span>Roles</span>
               </button>
             </>
           )}
-          {userData && userData.role === "user" && (
-            <>
-              <button
-                className="navbar-icon"
-                style={{ position: "relative" }}
-                onMouseEnter={() => {
-                  detailref.current.style.display = "block";
-                }}
-              >
+
+          <button
+            className="navbar-icon"
+            style={{ position: "relative" }}
+            onMouseEnter={() => {
+              detailref.current.style.display = "block";
+            }}
+          >
+            {userData && (
+              <>
                 <i className="fa-solid fa-user"></i>
                 <span>{userData.userID}</span>
+
                 <aside
                   ref={detailref}
                   onMouseLeave={() => {
@@ -142,17 +144,33 @@ function Navbar({ expiredSession }) {
                       <b>Role :</b> {userData.role}
                     </p>
                   </blockquote>
-                  <blockquote>
-                    <p>
-                      <b>Account Status:</b>{" "}
-                      {userData.isLocked === false ? "Active" : "Inactive"}
-                    </p>
-                  </blockquote>
-                  <blockquote>
-                    <p>
-                      <b>Lockout End:</b> {userData.lockoutEnd}
-                    </p>
-                  </blockquote>
+                  {userData.role !== "Administrator" && (
+                    <>
+                      <blockquote>
+                        <p>
+                          <b>Account Status:</b>{" "}
+                          {userData.isLocked === false ? "Active" : "Inactive"}
+                        </p>
+                      </blockquote>
+                      <blockquote>
+                        <p>
+                          <b>Lockout End:</b> {userData.lockoutEnd}
+                        </p>
+                      </blockquote>
+                    </>
+                  )}
+
+                  <button
+                    style={{
+                      backgroundColor: "white",
+                      color: "black",
+                      border: "2px solid black",
+                    }}
+                    onClick={() => setshowchangepasswordform(true)}
+                  >
+                    Change Password
+                  </button>
+
                   <button
                     onClick={() => {
                       document.cookie = "token=; max-age=0; path=/;";
@@ -162,9 +180,9 @@ function Navbar({ expiredSession }) {
                     Logout
                   </button>
                 </aside>
-              </button>
-            </>
-          )}
+              </>
+            )}
+          </button>
         </div>
       </nav>
     </>

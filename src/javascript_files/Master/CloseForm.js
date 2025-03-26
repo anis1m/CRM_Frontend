@@ -3,7 +3,7 @@ import "../../css_files/Master/CloseForm.css";
 
 function CloseForm({ close }) {
   return (
-    <button id="close-add-category-master-form" onClick={() => close(false)}>
+    <button id="close-form-button" onClick={() => close(false)}>
       <i className="fa-solid fa-xmark" />
     </button>
   );

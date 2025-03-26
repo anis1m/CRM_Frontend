@@ -11,9 +11,11 @@ function Register() {
     HashPassword: "",
     Email: "",
     MobileNumber: "",
-    Role: "user",
+    TokenCode: "",
+    Role: "Administrator",
   });
   const [loading, setloading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const nav = useNavigate();
 
   function handleSubmit(e) {
@@ -35,7 +37,7 @@ function Register() {
       .catch((err) => {
         console.log(err);
         setloading(false);
-        toast.error("Failed to Login", {
+        toast.error("Failed to Register", {
           position: "bottom-center",
         });
       });
@@ -71,6 +73,7 @@ function Register() {
               e.target.value = e.target.value.slice(0, 10);
             }}
             onChange={(e) => setData({ ...data, MobileNumber: e.target.value })}
+            required
           />
         </blockquote>
         <blockquote>
@@ -79,15 +82,59 @@ function Register() {
             type="password"
             placeholder="Enter Password"
             onChange={(e) => setData({ ...data, HashPassword: e.target.value })}
+            onInput={(e) => {
+              if (confirmPassword === e.target.value) {
+                passwordconfirmref.current.textContent = "";
+              } else {
+                passwordconfirmref.current.textContent =
+                  "Password is not matched";
+              }
+            }}
+            required
           />
         </blockquote>
 
         <blockquote>
           <label>Confirm Password</label>
-          <input type="password" placeholder="Enter Password Again" />
+          <input
+            type="password"
+            placeholder="Enter Password Again"
+            onInput={(e) => {
+              if (data.HashPassword === e.target.value) {
+                passwordconfirmref.current.textContent = "";
+              } else {
+                passwordconfirmref.current.textContent =
+                  "Password is not matched";
+              }
+            }}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
         </blockquote>
-
-        <button type="submit">Register</button>
+        <span ref={passwordconfirmref} style={{ color: "red" }}></span>
+        <blockquote>
+          <label>Token Code</label>
+          <input
+            type="text"
+            placeholder="Enter Token Code (Used to Change Password)"
+            onChange={(e) => setData({ ...data, TokenCode: e.target.value })}
+            onInput={(e) => {
+              e.target.value = e.target.value.slice(0, 10);
+            }}
+            required
+          />
+        </blockquote>
+        <button
+          onClick={(e) => {
+            if (passwordconfirmref.current.textContent === "") {
+              e.target.type = "submit";
+            } else {
+              e.target.type = "button";
+            }
+          }}
+        >
+          Register
+        </button>
       </form>
 
       <p>

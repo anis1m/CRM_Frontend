@@ -5,6 +5,7 @@ import "../../css_files/Homepage/Homepage.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import getCookie from "../../api";
+import ChangePassword from "../Signin/ChangePassword";
 
 export const triggerscroll = createContext();
 function Homepage() {
@@ -26,11 +27,16 @@ function Homepage() {
       nav("/");
     }
   }, []);
+
+  const [showchangepasswordform, setshowchangepasswordform] = useState(false);
   return (
     <section className="homepage">
       <ToastContainer />
 
-      <Navbar expiredSession={expiredSession} />
+      <Navbar
+        expiredSession={expiredSession}
+        setshowchangepasswordform={setshowchangepasswordform}
+      />
       <section className="inside-homepage">
         <Sidebar />
         <triggerscroll.Provider
@@ -41,6 +47,9 @@ function Homepage() {
           </section>
         </triggerscroll.Provider>
       </section>
+      {showchangepasswordform && (
+        <ChangePassword setshowchangepasswordform={setshowchangepasswordform} />
+      )}
     </section>
   );
 }

@@ -2,7 +2,8 @@
   width: 100%;
   height: 100vh;
   display: flex;
-  flex-direction: column; /* Ensures the Navbar and content stack vertically */
+  flex-direction: column;
+  position: relative;
 }
 
 .inside-homepage {

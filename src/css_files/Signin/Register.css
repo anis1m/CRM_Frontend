@@ -8,6 +8,10 @@
   position: relative;
 }
 
+.register h1 {
+  font-size: 2rem;
+  text-align: center;
+}
 .register form {
   width: 100%;
   display: flex;

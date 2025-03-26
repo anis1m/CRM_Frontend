@@ -1,0 +1,75 @@
+.add-roles {
+  border: 1px solid black;
+  background-color: whitesmoke;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 40%;
+  margin: 2rem auto;
+  position: relative;
+}
+
+.add-roles form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 1rem;
+}
+
+.add-roles form blockquote {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
+}
+
+.add-roles form h1 {
+  font-size: 2.2rem;
+  margin: 0 auto;
+}
+
+.add-roles form blockquote select {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.add-roles form blockquote aside {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1rem;
+  column-gap: 2.5rem;
+  border: 1px solid gray;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.add-roles form blockquote aside mark {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: transparent;
+}
+
+.add-roles form blockquote aside mark input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: auto;
+}
+
+.add-roles form button[type="submit"] {
+  background-color: darkcyan;
+  color: white;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 0;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+}
