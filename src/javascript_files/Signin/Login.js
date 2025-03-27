@@ -4,12 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import getCookie from "../../api";
+import Swal from "sweetalert2";
 
 function Login() {
   const [logindata, setlogindata] = useState({
     Username: "",
     Password: "",
   });
+
+  const [failedloginattempts, setfailedloginattempts] = useState(0);
+
   const [loading, setloading] = useState(false);
   const nav = useNavigate();
 
@@ -20,10 +24,25 @@ function Login() {
     axios
       .post(url, logindata)
       .then((res) => {
+        console.log(res);
         document.cookie = "token=" + res.data.token;
         toast.success("Logged in Successfully", {
           position: "bottom-center",
         });
+
+        const url2 = `${process.env.REACT_APP_API_URL}/api/User`;
+        axios
+          .put(url2, {
+            UserID: logindata.Username,
+            FailedLoginAttempts: failedloginattempts,
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         setTimeout(() => {
           nav("/dashboard");
           setloading(false);
@@ -31,8 +50,12 @@ function Login() {
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Failed to Login", {
-          position: "bottom-center",
+        console.log(logindata.FailedLoginAttempts);
+        setfailedloginattempts(failedloginattempts + 1);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: err.response.data,
         });
         setloading(false);
       });
@@ -50,6 +73,7 @@ function Login() {
             onChange={(e) =>
               setlogindata({ ...logindata, Username: e.target.value })
             }
+            required
           />
         </blockquote>
         <blockquote>
@@ -60,15 +84,25 @@ function Login() {
             onChange={(e) =>
               setlogindata({ ...logindata, Password: e.target.value })
             }
+            required
           />
         </blockquote>
         <button type="submit">Login</button>
       </form>
       <p>
         Not a Member Yet. Click{" "}
-        <Link to={"/register"}>
-          <a>Here </a>
-        </Link>
+        <a
+          href="#"
+          onClick={() => {
+            Swal.fire({
+              icon: "warning",
+              title: "Register User",
+              text: "Please Contact Administrator directly or mail to admin123@gmail.com",
+            });
+          }}
+        >
+          Here{" "}
+        </a>
         to Register
       </p>
       {loading && (

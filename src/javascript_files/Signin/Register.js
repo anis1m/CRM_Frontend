@@ -3,8 +3,9 @@ import "../../css_files/Signin/Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import CloseForm from "../Master/CloseForm";
 
-function Register() {
+function Register({ setshowcreateuser }) {
   const passwordconfirmref = useRef();
   const [data, setData] = useState({
     UserID: "",
@@ -12,7 +13,7 @@ function Register() {
     Email: "",
     MobileNumber: "",
     TokenCode: "",
-    Role: "Administrator",
+    Role: "",
   });
   const [loading, setloading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -77,6 +78,19 @@ function Register() {
           />
         </blockquote>
         <blockquote>
+          <label>Role</label>
+          <select
+            onChange={(e) => setData({ ...data, Role: e.target.value })}
+            required
+          >
+            <option value="">Select Role Name</option>
+            <option value="Service-Co-Ordinator">Service-Co-Ordinator</option>
+            <option value="Store Manager">Store Manager</option>
+            <option value="Purchase Manager">Purchase Manager</option>
+            <option value="Technician">Technician</option>
+          </select>
+        </blockquote>
+        <blockquote>
           <label>Password</label>
           <input
             type="password"
@@ -133,26 +147,16 @@ function Register() {
             }
           }}
         >
-          Register
+          Create
         </button>
       </form>
 
-      <p>
-        By clicking register, you agree to our terms of service and privacy
-        policy
-      </p>
-      <p>
-        Already Registered. Click{" "}
-        <Link to={"/login"}>
-          <a>Here</a>
-        </Link>{" "}
-        to Login
-      </p>
       {loading && (
         <div className="loading-screen-login-signup">
           <i class="fa-solid fa-spinner fa-3x fa-spin"></i>
         </div>
       )}
+      <CloseForm close={setshowcreateuser} />
     </section>
   );
 }
