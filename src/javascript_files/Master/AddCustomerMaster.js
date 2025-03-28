@@ -136,10 +136,10 @@ function AddCustomerMaster({
           toast.success(response.data.message, {
             position: "bottom-center",
           });
-          const contacturl = `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres/UpdateContactCentre`;
+
           axios
             .post(
-              contacturl,
+              `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres/UpdateContactCentre`,
               {
                 id: customercontactupdatedata[0].id,
                 CustomerId: response.data.id,
@@ -161,10 +161,9 @@ function AddCustomerMaster({
               console.log(err);
             });
           for (let i = 0; i < customeraddressdata.length; i++) {
-            const addressurl = `${process.env.REACT_APP_API_URL}/api/v1/Addresses/UpdateAddress`;
             axios
               .post(
-                addressurl,
+                `${process.env.REACT_APP_API_URL}/api/v1/Addresses/UpdateAddress`,
                 {
                   id: customeraddressupdatedata[i].id,
                   CustomerId: response.data.id,
@@ -188,10 +187,9 @@ function AddCustomerMaster({
           }
 
           for (let i = 0; i < customerboilerdata.length; i++) {
-            const boilerurl = `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers/UpdateCustomerBoiler`;
             axios
               .post(
-                boilerurl,
+                `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers/UpdateCustomerBoiler`,
                 {
                   id: customerboilerupdatedata[i].id,
                   CustomerId: response.data.id,
@@ -239,10 +237,10 @@ function AddCustomerMaster({
         })
         .then((response) => {
           console.log(response.data.id);
-          const contacturl = `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres`;
+
           axios
             .post(
-              contacturl,
+              `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres`,
               {
                 CustomerId: response.data.id,
                 POC: customerContact.POC,
@@ -263,10 +261,9 @@ function AddCustomerMaster({
               console.log(err);
             });
           for (let i = 0; i < customeraddressdata.length; i++) {
-            const addressurl = `${process.env.REACT_APP_API_URL}/api/v1/Addresses`;
             axios
               .post(
-                addressurl,
+                `${process.env.REACT_APP_API_URL}/api/v1/Addresses`,
                 {
                   CustomerId: response.data.id,
                   Area: customeraddressdata[i].area,
@@ -289,10 +286,9 @@ function AddCustomerMaster({
           }
 
           for (let i = 0; i < customerboilerdata.length; i++) {
-            const boilerurl = `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers`;
             axios
               .post(
-                boilerurl,
+                `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers`,
                 {
                   CustomerId: response.data.id,
                   BoilerHead: customerboilerdata[i].boilerHead,

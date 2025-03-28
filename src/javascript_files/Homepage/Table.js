@@ -40,6 +40,63 @@ function Table({
           position: "bottom-center",
         });
         setReload(!reload);
+        let shouldbreak = false;
+        for (let i = 0; i < tabledata.length; i++) {
+          for (let j = 0; j < tabledata[i].length; j++) {
+            if (tabledata[i][j] === "Tap here to See More Details") {
+              axios
+                .delete(
+                  `${process.env.REACT_APP_API_URL}/api/v1/Addresses/DeleteAddressByCustomerId/${id}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              axios
+                .delete(
+                  `${process.env.REACT_APP_API_URL}/api/v1/CustomerBoilers/DeleteCustomerBoilersByCustomerId/${id}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              axios
+                .delete(
+                  `${process.env.REACT_APP_API_URL}/api/v1/ContactCentres/DeleteContactCentreByCustomerId/${id}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              shouldbreak = true;
+              break;
+            }
+          }
+          if (shouldbreak) {
+            break;
+          }
+        }
       })
       .catch((err) => {
         toast.error("Failed to Delete", {

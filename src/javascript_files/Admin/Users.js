@@ -6,7 +6,9 @@ import Register from "../Signin/Register";
 function Users() {
   const [usersdata, setusersdata] = useState([]);
   const [showcreateuser, setshowcreateuser] = useState(false);
+  const [refresh, setrefresh] = useState(false);
   useEffect(() => {
+    setusersdata([]);
     const url = `${process.env.REACT_APP_API_URL}/api/User`;
     axios
       .get(url)
@@ -17,11 +19,17 @@ function Users() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <>
-      {showcreateuser && <Register setshowcreateuser={setshowcreateuser} />}
+      {showcreateuser && (
+        <Register
+          setshowcreateuser={setshowcreateuser}
+          refresh={refresh}
+          setrefresh={setrefresh}
+        />
+      )}
       <section className="table">
         <h1
           style={{ fontSize: "2.5rem", margin: "1rem 0", textAlign: "center" }}

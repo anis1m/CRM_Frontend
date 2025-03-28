@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import CloseForm from "../Master/CloseForm";
 
-function Register({ setshowcreateuser }) {
+function Register({ setshowcreateuser, refresh, setrefresh }) {
   const passwordconfirmref = useRef();
   const [data, setData] = useState({
     UserID: "",
@@ -17,7 +17,6 @@ function Register({ setshowcreateuser }) {
   });
   const [loading, setloading] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const nav = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -28,12 +27,11 @@ function Register({ setshowcreateuser }) {
       .then((res) => {
         console.log(res.data);
         setloading(false);
-        toast.success("Registered Successfully. Redirecting to Login page", {
+        toast.success("User Created Successfully", {
           position: "bottom-center",
         });
-        setTimeout(() => {
-          nav("/login");
-        }, 2500);
+        setshowcreateuser(false);
+        setrefresh(!refresh);
       })
       .catch((err) => {
         console.log(err);
@@ -150,9 +148,15 @@ function Register({ setshowcreateuser }) {
           Create
         </button>
       </form>
-
       {loading && (
-        <div className="loading-screen-login-signup">
+        <div
+          className="loading-screen-login-signup"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <i class="fa-solid fa-spinner fa-3x fa-spin"></i>
         </div>
       )}

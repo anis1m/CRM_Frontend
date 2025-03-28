@@ -104,6 +104,8 @@ function AddCustomerPricingMaster({
                 ...customerPricingData,
                 Code: e.target.value,
               });
+            }}
+            onInput={(e) => {
               if (e.target.value === "C") {
                 setshowextratextbox(true);
               } else {
@@ -124,9 +126,15 @@ function AddCustomerPricingMaster({
             required
           >
             <option value="">Select Discount Code</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
+            <option value="A" selected={customerPricingData.Code === "A"}>
+              A
+            </option>
+            <option value="B" selected={customerPricingData.Code === "B"}>
+              B
+            </option>
+            <option value="C" selected={customerPricingData.Code === "C"}>
+              C
+            </option>
           </select>
         </blockquote>
         <blockquote>
@@ -215,7 +223,7 @@ function AddCustomerPricingMaster({
           required
         />
       </blockquote>
-      <button type="submit">Add </button>
+      <button type="submit">{triggerupdate ? "Update" : "Add"}</button>
       <CloseForm close={setshowaddform} />
     </form>
   );

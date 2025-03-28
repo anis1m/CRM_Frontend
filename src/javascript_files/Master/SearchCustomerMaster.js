@@ -39,6 +39,9 @@ function SearchCustomerMaster({
       .then((res) => {
         setactivatedfilters([]);
         console.log(res);
+        toast.success("Fetched", {
+          position: "bottom-center",
+        });
 
         setsearchedtabledata(res.data);
         if (searchData.Id === 0) {
@@ -63,9 +66,6 @@ function SearchCustomerMaster({
         }
 
         setfilterbutton(true);
-        toast.success("Fetched", {
-          position: "bottom-center",
-        });
       })
       .catch((err) => {
         console.log(err);

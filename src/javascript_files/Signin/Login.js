@@ -30,9 +30,8 @@ function Login() {
           position: "bottom-center",
         });
 
-        const url2 = `${process.env.REACT_APP_API_URL}/api/User`;
         axios
-          .put(url2, {
+          .put(`${process.env.REACT_APP_API_URL}/api/User`, {
             UserID: logindata.Username,
             FailedLoginAttempts: failedloginattempts,
           })

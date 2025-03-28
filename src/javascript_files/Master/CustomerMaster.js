@@ -41,6 +41,7 @@ function CustomerMaster() {
       tablearr.push(tabledata[i].id);
       tablearr.push(tabledata[i].orgName);
       tablearr.push(tabledata[i].description);
+      tablearr.push("Tap here to See More Details");
 
       setTableData((prev) => {
         const arr = [...prev];
