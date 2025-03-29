@@ -178,14 +178,6 @@ function AddCustomerPricingMaster({
                 }
               }}
               readOnly={customerPricingData.Percentage === "" ? true : false}
-              onChange={(e) => {
-                if (e.target.value === "") {
-                  setCustomerPricingData({
-                    ...customerPricingData,
-                    Percentage: 0,
-                  });
-                }
-              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   setCustomerPricingData({
@@ -200,13 +192,33 @@ function AddCustomerPricingMaster({
                   });
                 }
               }}
+              onClick={() => {
+                axios
+                  .get(
+                    `${process.env.REACT_APP_API_URL}/api/v1/CustomerPricing/GetCustomerPricingByIdOrCodeOrPercentage?code=B`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    setCustomerPricingData({
+                      ...customerPricingData,
+                      Percentage: res.data[0].percentage,
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }}
               required
             />
           </blockquote>
         )}
       </aside>
       <blockquote>
-        <label>Description (Upto 200 Characters)</label>
+        <label>Description </label>
         <textarea
           rows={4}
           placeholder="Description"

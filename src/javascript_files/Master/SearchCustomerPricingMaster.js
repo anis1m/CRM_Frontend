@@ -107,18 +107,21 @@ function SearchCustomerPricingMaster({
       <blockquote>
         <label>Code</label>
         <input
-          type="number"
+          type="text"
           placeholder="Enter Customer Code"
           onChange={(e) =>
             setSearchData({ ...searchData, Code: e.target.value })
           }
           value={searchData.Code}
+          onInput={(e) => {
+            e.target.value = e.target.value.toUpperCase().slice(0, 1);
+          }}
         />
       </blockquote>
       <blockquote>
         <label>Rate</label>
         <input
-          type="email"
+          type="text"
           placeholder="Enter Rate"
           onInput={(e) => {
             e.target.value = e.target.value
