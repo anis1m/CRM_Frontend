@@ -4,42 +4,73 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import CloseForm from "../Master/CloseForm";
+import Swal from "sweetalert2";
 
-function Register({ setshowcreateuser, refresh, setrefresh }) {
-  const passwordconfirmref = useRef();
+function Register({
+  setshowcreateuser,
+  refresh,
+  setrefresh,
+  fetchuserdata,
+  triggerupdate,
+}) {
   const [data, setData] = useState({
-    UserID: "",
+    UserID: triggerupdate ? fetchuserdata?.userID : "",
     HashPassword: "",
-    Email: "",
-    MobileNumber: "",
+    ConfirmHashPassword: "",
+    Email: triggerupdate ? fetchuserdata?.email : "",
+    MobileNumber: triggerupdate ? fetchuserdata?.mobileNumber : "",
     TokenCode: "",
-    Role: "",
+    Role: triggerupdate ? fetchuserdata?.role : "",
   });
   const [loading, setloading] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
     setloading(true);
-    const url = `${process.env.REACT_APP_API_URL}/api/User`;
-    axios
-      .post(url, data)
-      .then((res) => {
-        console.log(res.data);
-        setloading(false);
-        toast.success("User Created Successfully", {
-          position: "bottom-center",
+    if (triggerupdate) {
+      const url = `${process.env.REACT_APP_API_URL}/api/User`;
+      axios
+        .put(url, {
+          userID: data.UserID,
+          Email: data.Email,
+          MobileNumber: data.MobileNumber,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setloading(false);
+          toast.success("User Updated Successfully", {
+            position: "bottom-center",
+          });
+          setshowcreateuser(false);
+          setrefresh(!refresh);
+        })
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
         });
-        setshowcreateuser(false);
-        setrefresh(!refresh);
-      })
-      .catch((err) => {
-        console.log(err);
-        setloading(false);
-        toast.error("Failed to Register", {
-          position: "bottom-center",
+    } else {
+      const url = `${process.env.REACT_APP_API_URL}/api/User`;
+      axios
+        .post(url, data)
+        .then((res) => {
+          console.log(res.data);
+          setloading(false);
+          toast.success("User Created Successfully", {
+            position: "bottom-center",
+          });
+          setshowcreateuser(false);
+          setrefresh(!refresh);
+        })
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
+          Swal.fire({
+            icon: "error",
+            title: "Error Occured",
+            text: JSON.stringify(err.response.data).replaceAll('"', ""),
+          });
         });
-      });
+    }
   }
   return (
     <section className="register">
@@ -50,8 +81,10 @@ function Register({ setshowcreateuser, refresh, setrefresh }) {
           <input
             required
             type="text"
+            readOnly={triggerupdate}
             placeholder="Enter Username (e.g user123)"
             onChange={(e) => setData({ ...data, UserID: e.target.value })}
+            value={data.UserID}
           />
         </blockquote>
         <blockquote>
@@ -61,6 +94,7 @@ function Register({ setshowcreateuser, refresh, setrefresh }) {
             type="email"
             placeholder="Enter Email"
             onChange={(e) => setData({ ...data, Email: e.target.value })}
+            value={data.Email}
           />
         </blockquote>
         <blockquote>
@@ -72,6 +106,7 @@ function Register({ setshowcreateuser, refresh, setrefresh }) {
               e.target.value = e.target.value.slice(0, 10);
             }}
             onChange={(e) => setData({ ...data, MobileNumber: e.target.value })}
+            value={data.MobileNumber}
             required
           />
         </blockquote>
@@ -80,73 +115,74 @@ function Register({ setshowcreateuser, refresh, setrefresh }) {
           <select
             onChange={(e) => setData({ ...data, Role: e.target.value })}
             required
+            disabled={triggerupdate}
           >
             <option value="">Select Role Name</option>
-            <option value="Service-Co-Ordinator">Service-Co-Ordinator</option>
-            <option value="Store Manager">Store Manager</option>
-            <option value="Purchase Manager">Purchase Manager</option>
-            <option value="Technician">Technician</option>
+            <option
+              value="Service-Co-Ordinator"
+              selected={data.Role === "Service-Co-Ordinator"}
+            >
+              Service-Co-Ordinator
+            </option>
+            <option
+              value="Store Manager"
+              selected={data.Role === "Store Manager"}
+            >
+              Store Manager
+            </option>
+            <option
+              value="Purchase Manager"
+              selected={data.Role === "Purchase Manager"}
+            >
+              Purchase Manager
+            </option>
+            <option value="Technician" selected={data.Role === "Technician"}>
+              Technician
+            </option>
           </select>
         </blockquote>
-        <blockquote>
-          <label>Password</label>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            onChange={(e) => setData({ ...data, HashPassword: e.target.value })}
-            onInput={(e) => {
-              if (confirmPassword === e.target.value) {
-                passwordconfirmref.current.textContent = "";
-              } else {
-                passwordconfirmref.current.textContent =
-                  "Password is not matched";
-              }
-            }}
-            required
-          />
-        </blockquote>
 
-        <blockquote>
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            placeholder="Enter Password Again"
-            onInput={(e) => {
-              if (data.HashPassword === e.target.value) {
-                passwordconfirmref.current.textContent = "";
-              } else {
-                passwordconfirmref.current.textContent =
-                  "Password is not matched";
+        {triggerupdate === false && (
+          <blockquote>
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              onChange={(e) =>
+                setData({ ...data, HashPassword: e.target.value })
               }
-            }}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </blockquote>
-        <span ref={passwordconfirmref} style={{ color: "red" }}></span>
-        <blockquote>
-          <label>Token Code</label>
-          <input
-            type="text"
-            placeholder="Enter Token Code (Used to Change Password)"
-            onChange={(e) => setData({ ...data, TokenCode: e.target.value })}
-            onInput={(e) => {
-              e.target.value = e.target.value.slice(0, 10);
-            }}
-            required
-          />
-        </blockquote>
-        <button
-          onClick={(e) => {
-            if (passwordconfirmref.current.textContent === "") {
-              e.target.type = "submit";
-            } else {
-              e.target.type = "button";
-            }
-          }}
-        >
-          Create
-        </button>
+              required
+            />
+          </blockquote>
+        )}
+        {triggerupdate === false && (
+          <blockquote>
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Enter Password Again"
+              onChange={(e) =>
+                setData({ ...data, ConfirmHashPassword: e.target.value })
+              }
+              required
+            />
+          </blockquote>
+        )}
+        {triggerupdate === false && (
+          <blockquote>
+            <label>Token Code</label>
+            <input
+              type="text"
+              placeholder="Enter Token Code (Used to Change Password)"
+              onChange={(e) => setData({ ...data, TokenCode: e.target.value })}
+              onInput={(e) => {
+                e.target.value = e.target.value.slice(0, 10);
+              }}
+              required
+            />
+          </blockquote>
+        )}
+        <button type="submit">{triggerupdate ? "Edit" : "Create"}</button>
       </form>
       {loading && (
         <div

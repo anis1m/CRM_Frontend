@@ -35,6 +35,16 @@
   font-size: 1rem;
 }
 
+.register form blockquote input[readonly] {
+  background-color: whitesmoke;
+  border: 1px solid black;
+}
+
+.register form blockquote select[disabled] {
+  border: 1px solid black;
+  color: black;
+}
+
 .register form button {
   width: fit-content;
   padding: 0.5rem 1rem;

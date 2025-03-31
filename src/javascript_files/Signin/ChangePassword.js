@@ -1,6 +1,11 @@
 import React, { useReducer, useState } from "react";
 import "../../css_files/Signin/ChangePassword.css";
 import CloseForm from "../Master/CloseForm";
+import axios from "axios";
+import getCookie from "../../api";
+import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 function ChangePassword({ setshowchangepasswordform }) {
   const [passwordData, setPasswordData] = useState({
@@ -10,10 +15,41 @@ function ChangePassword({ setshowchangepasswordform }) {
     ConfirmNewPassword: "",
   });
 
+  function handlesubmit(e) {
+    e.preventDefault();
+    if (getCookie("token")) {
+      const decoded = jwtDecode(getCookie("token"));
+
+      axios
+        .put(`${process.env.REACT_APP_API_URL}/api/User/ChangePassword`, {
+          UserID: decoded.sub,
+          OldHashPassword: passwordData.OldPassword,
+          NewHashPassword: passwordData.NewPassword,
+          ConfirmPassword: passwordData.ConfirmNewPassword,
+          TokenCode: passwordData.TokenCode,
+        })
+        .then((res) => {
+          console.log(res);
+          toast.success("Password Changed Successfully", {
+            position: "bottom-center",
+          });
+          setshowchangepasswordform(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          Swal.fire({
+            icon: "error",
+            title: "Error Occured",
+            text: JSON.stringify(err.response.data).replaceAll('"', ""),
+          });
+        });
+    }
+  }
+
   return (
     <section className="change-password">
       <div>
-        <form>
+        <form onSubmit={handlesubmit}>
           <h1>Change Password</h1>
           <blockquote>
             <label>Token Code</label>

@@ -40,6 +40,14 @@
   box-shadow: 0px 5px 12px rgba(0, 119, 255, 0.4);
 }
 
+.table-reset input[placeholder="Enter Username to Search"] {
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  width: fit-content;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+}
+
 .table-reset button i {
   font-size: 1.5rem;
   cursor: pointer;
