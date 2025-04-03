@@ -75,7 +75,16 @@ function DetailsRoleTable({ setshowdetailsroletable, role, isAdmin }) {
         zIndex: 11,
       }}
     >
-      <section className="table details-role-table">
+      <section
+        className="table details-role-table"
+        style={{
+          width: "70%",
+          margin: "15vh auto 0 auto",
+          maxHeight: "80vh",
+          overflowY: "auto",
+          position: "relative",
+        }}
+      >
         <h1>Details Role Table</h1>
         <table>
           <thead>
