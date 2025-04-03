@@ -26,7 +26,8 @@ function CurrencyMaster() {
   const [currencyupdatedata, setcurrencyupdatedata] = useState(null);
   const [datareload, setdatareload] = useState(0);
   const [loading, setloading] = useState(false);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -100,6 +101,50 @@ function CurrencyMaster() {
       });
   }, [reload]);
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Currency" && x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Currency" && x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Currency" && x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Currency" && x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <>
       <section className="currency-master">
@@ -111,6 +156,7 @@ function CurrencyMaster() {
             setshowaddform={setshowaddform}
             settriggerupdate={settriggerupdate}
             setshowsearchform={setshowsearchform}
+            permit={writePermission}
           />
 
           <SearchMaster
@@ -155,6 +201,9 @@ function CurrencyMaster() {
           activatedfilters={activatedfilters}
           setactivatedfilters={setactivatedfilters}
           setshowsearchform={setshowsearchform}
+          readPermission={readPermission}
+          updatePermission={updatePermission}
+          deletePermission={deletePermission}
         />
       </section>
     </>

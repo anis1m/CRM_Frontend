@@ -27,7 +27,8 @@ function BoilerSeriesPartsMappingMaster() {
     useState(null);
   const [datareload, setdatareload] = useState(0);
   const [loading, setloading] = useState(false);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -101,6 +102,58 @@ function BoilerSeriesPartsMappingMaster() {
       });
   }, [reload]);
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Boiler Series Parts Mapping" &&
+        x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Boiler Series Parts Mapping" &&
+        x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Boiler Series Parts Mapping" &&
+        x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Boiler Series Parts Mapping" &&
+        x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <section className="boiler-series-parts-mapping-master">
       <ToastContainer />
@@ -111,6 +164,7 @@ function BoilerSeriesPartsMappingMaster() {
           setshowaddform={setshowaddform}
           settriggerupdate={settriggerupdate}
           setshowsearchform={setshowsearchform}
+          permit={writePermission}
         />
 
         <SearchMaster
@@ -155,6 +209,9 @@ function BoilerSeriesPartsMappingMaster() {
         activatedfilters={activatedfilters}
         setactivatedfilters={setactivatedfilters}
         setshowsearchform={setshowsearchform}
+        readPermission={readPermission}
+        updatePermission={updatePermission}
+        deletePermission={deletePermission}
       />
     </section>
   );

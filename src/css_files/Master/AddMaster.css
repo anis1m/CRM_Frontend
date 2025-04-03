@@ -21,3 +21,8 @@
   transform: scale(1.05);
   box-shadow: 2px 4px 15px rgba(0, 128, 128, 0.3);
 }
+
+.add-master[disabled] {
+  background: gray;
+  cursor: not-allowed;
+}

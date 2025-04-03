@@ -21,7 +21,8 @@ function CustomerPricingMaster() {
     useState(null);
   const [datareload, setdatareload] = useState(0);
   const [loading, setloading] = useState(false);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -94,6 +95,58 @@ function CustomerPricingMaster() {
       });
   }, [reload]);
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Customer Pricing" &&
+        x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Customer Pricing" &&
+        x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Customer Pricing" &&
+        x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Customer Pricing" &&
+        x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <section className="customer-pricing-master">
       <ToastContainer />
@@ -104,6 +157,7 @@ function CustomerPricingMaster() {
           setshowaddform={setshowaddform}
           settriggerupdate={settriggerupdate}
           setshowsearchform={setshowsearchform}
+          permit={writePermission}
         />
 
         <SearchMaster
@@ -148,6 +202,9 @@ function CustomerPricingMaster() {
         activatedfilters={activatedfilters}
         setactivatedfilters={setactivatedfilters}
         setshowsearchform={setshowsearchform}
+        readPermission={readPermission}
+        updatePermission={updatePermission}
+        deletePermission={deletePermission}
       />
     </section>
   );

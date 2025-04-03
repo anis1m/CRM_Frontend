@@ -20,7 +20,8 @@ function BoilerMaster() {
   const [loading, setloading] = useState(false);
   const [boilerupdatedata, setboilerupdatedata] = useState(null);
   const [datareload, setdatareload] = useState(0);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -90,6 +91,48 @@ function BoilerMaster() {
       });
   }, [reload]);
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Boiler" && x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Boiler" && x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Boiler" && x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Boiler" && x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <>
       <section className="boiler-master">
@@ -101,6 +144,7 @@ function BoilerMaster() {
             setshowaddform={setshowaddform}
             settriggerupdate={settriggerupdate}
             setshowsearchform={setshowsearchform}
+            permit={writePermission}
           />
 
           <SearchMaster
@@ -145,6 +189,9 @@ function BoilerMaster() {
           activatedfilters={activatedfilters}
           setactivatedfilters={setactivatedfilters}
           setshowsearchform={setshowsearchform}
+          readPermission={readPermission}
+          updatePermission={updatePermission}
+          deletePermission={deletePermission}
         />
       </section>
     </>

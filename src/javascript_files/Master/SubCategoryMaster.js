@@ -20,7 +20,8 @@ function SubCategoryMaster() {
   const [subcategoryupdatedata, setsubcategoryupdatedata] = useState(null);
   const [datareload, setdatareload] = useState(0);
   const [loading, setloading] = useState(false);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -111,6 +112,56 @@ function SubCategoryMaster() {
       });
   }
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" && x.subHead === "Sub-Category" && x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Sub-Category" &&
+        x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Sub-Category" &&
+        x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) =>
+        x.head === "Master" &&
+        x.subHead === "Sub-Category" &&
+        x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <>
       <section className="sub-category-master">
@@ -122,6 +173,7 @@ function SubCategoryMaster() {
             setshowaddform={setshowaddform}
             settriggerupdate={settriggerupdate}
             setshowsearchform={setshowsearchform}
+            permit={writePermission}
           />
 
           <SearchMaster
@@ -166,6 +218,9 @@ function SubCategoryMaster() {
           activatedfilters={activatedfilters}
           setactivatedfilters={setactivatedfilters}
           setshowsearchform={setshowsearchform}
+          readPermission={readPermission}
+          updatePermission={updatePermission}
+          deletePermission={deletePermission}
         />
       </section>
     </>

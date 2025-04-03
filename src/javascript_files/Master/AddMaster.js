@@ -6,6 +6,7 @@ function AddMaster({
   setshowsearchform,
   settriggerupdate,
   setshowaddform,
+  permit,
 }) {
   return (
     <button
@@ -15,6 +16,7 @@ function AddMaster({
         settriggerupdate(false);
         setshowsearchform(false);
       }}
+      disabled={permit()}
     >
       {text}
     </button>

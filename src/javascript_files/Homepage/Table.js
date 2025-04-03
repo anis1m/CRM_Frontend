@@ -24,6 +24,9 @@ function Table({
   setactivatedfilters,
   setshowsearchform,
   setshowmorecustomerdata,
+  readPermission,
+  updatePermission,
+  deletePermission,
 }) {
   const { triggerscrollupwords } = useContext(triggerscroll);
 
@@ -161,61 +164,79 @@ function Table({
           </tr>
         </thead>
         <tbody>
-          {tabledata.map((data, index) => (
-            <tr key={index}>
-              {data.map((tdata, idx) => (
-                <td key={idx}>
-                  {tdata === "Tap here to See More Details" ? (
-                    <a
-                      href="#"
-                      onClick={() => {
-                        setshowmorecustomerdata(true);
-                        fetchdata(tabledata[index][0]);
-                      }}
-                    >
-                      {tdata}
-                    </a>
-                  ) : (
-                    <p>{tdata}</p>
-                  )}
+          {readPermission() ? (
+            tabledata.map((data, index) => (
+              <tr key={index}>
+                {data.map((tdata, idx) => (
+                  <td key={idx}>
+                    {tdata === "Tap here to See More Details" ? (
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setshowmorecustomerdata(true);
+                          fetchdata(tabledata[index][0]);
+                        }}
+                      >
+                        {tdata}
+                      </a>
+                    ) : (
+                      <p>{tdata}</p>
+                    )}
+                  </td>
+                ))}
+                <td>
+                  <i
+                    className="fa-regular fa-pen-to-square"
+                    style={{
+                      pointerEvents: updatePermission() && "none",
+                      color: updatePermission() && "gray",
+                      cursor: updatePermission() && "not-allowed",
+                    }}
+                    onClick={() => {
+                      setdatareload(datareload + 1);
+                      setshowaddform(true);
+                      settriggerupdate(true);
+                      triggerscrollupwords();
+                      fetchdata(tabledata[index][0]);
+                    }}
+                    title="Edit"
+                  />
                 </td>
-              ))}
-              <td>
-                <i
-                  className="fa-regular fa-pen-to-square"
-                  onClick={() => {
-                    setdatareload(datareload + 1);
-                    setshowaddform(true);
-                    settriggerupdate(true);
-                    triggerscrollupwords();
-                    fetchdata(tabledata[index][0]);
-                  }}
-                  title="Edit"
-                />
-              </td>
-              <td>
-                <i
-                  className="fa-solid fa-trash"
-                  title="Delete"
-                  onClick={() => {
-                    Swal.fire({
-                      title: "Are you sure?",
-                      text: "You won't be able to revert this!",
-                      icon: "warning",
-                      showCancelButton: true,
-                      confirmButtonColor: "#3085d6",
-                      cancelButtonColor: "#d33",
-                      confirmButtonText: "Yes, delete it!",
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        handleDelete(tabledata[index][0]);
-                      }
-                    });
-                  }}
-                />
+                <td>
+                  <i
+                    className="fa-solid fa-trash"
+                    title="Delete"
+                    style={{
+                      pointerEvents: deletePermission() && "none",
+                      color: deletePermission() && "gray",
+                      cursor: deletePermission() && "not-allowed",
+                    }}
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!",
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          handleDelete(tabledata[index][0]);
+                        }
+                      });
+                    }}
+                  />
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={tabledata.length + 2}>
+                You do not have permission to read data
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       {loading && (

@@ -6,26 +6,10 @@ import getCookie from "../../api";
 import axios from "axios";
 import DetailsRoleTable from "../Admin/DetailsRoleTable";
 
-function Navbar({ expiredSession, setshowchangepasswordform }) {
+function Navbar({ expiredSession, setshowchangepasswordform, userData }) {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
   const detailref = useRef();
   const [detailsrole, setdetailsrole] = useState(false);
-
-  useEffect(() => {
-    if (getCookie("token")) {
-      const decoded = jwtDecode(getCookie("token"));
-      const url = `${process.env.REACT_APP_API_URL}/api/User/GetUserbyUserId?userId=${decoded.sub}`;
-      axios
-        .get(url)
-        .then((res) => {
-          setUserData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
 
   return (
     <>

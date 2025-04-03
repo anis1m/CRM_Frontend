@@ -19,7 +19,8 @@ function UnitMaster() {
   const [triggerupdate, settriggerupdate] = useState(false);
   const [unitupdatedata, setunitupdatedata] = useState(null);
   const [datareload, setdatareload] = useState(0);
-  const { setExpiredSession } = useContext(triggerscroll);
+  const { setExpiredSession, permissionsdata, userData } =
+    useContext(triggerscroll);
   const [filterbutton, setfilterbutton] = useState(false);
   const [activatedfilters, setactivatedfilters] = useState([]);
 
@@ -88,6 +89,46 @@ function UnitMaster() {
       });
   }, [reload]);
 
+  function readPermission() {
+    if (userData.role === "Administrator") {
+      return true;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Unit" && x.isRead === true
+    );
+    return issatisfied;
+  }
+
+  function writePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Unit" && x.isWrite === true
+    );
+    return !issatisfied;
+  }
+
+  function updatePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Unit" && x.isUpdate === true
+    );
+    return !issatisfied;
+  }
+
+  function deletePermission() {
+    if (userData.role === "Administrator") {
+      return false;
+    }
+    const issatisfied = permissionsdata.some(
+      (x) => x.head === "Master" && x.subHead === "Unit" && x.isDelete === true
+    );
+    return !issatisfied;
+  }
+
   return (
     <>
       <section className="unit-master">
@@ -99,6 +140,7 @@ function UnitMaster() {
             setshowaddform={setshowaddform}
             settriggerupdate={settriggerupdate}
             setshowsearchform={setshowsearchform}
+            permit={writePermission}
           />
 
           <SearchMaster
@@ -142,6 +184,9 @@ function UnitMaster() {
           activatedfilters={activatedfilters}
           setactivatedfilters={setactivatedfilters}
           setshowsearchform={setshowsearchform}
+          readPermission={readPermission}
+          updatePermission={updatePermission}
+          deletePermission={deletePermission}
         />
       </section>
     </>

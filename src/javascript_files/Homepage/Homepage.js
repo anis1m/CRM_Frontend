@@ -6,12 +6,16 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import getCookie from "../../api";
 import ChangePassword from "../Signin/ChangePassword";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 export const triggerscroll = createContext();
 function Homepage() {
   const insidehomepageref = useRef();
   const [expiredSession, setExpiredSession] = useState(false);
   const nav = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [permissionsdata, setpermissionsdata] = useState([]);
 
   function triggerscrollupwords() {
     if (insidehomepageref.current) {
@@ -21,6 +25,32 @@ function Homepage() {
       });
     }
   }
+
+  useEffect(() => {
+    if (getCookie("token")) {
+      const decoded = jwtDecode(getCookie("token"));
+      const url = `${process.env.REACT_APP_API_URL}/api/User/GetUserbyUserId?userId=${decoded.sub}`;
+      axios
+        .get(url)
+        .then((res) => {
+          setUserData(res.data);
+          axios
+            .get(
+              `${process.env.REACT_APP_API_URL}/api/Permissions/GetPermissionByRole?role=${res.data.role}`
+            )
+            .then((res) => {
+              console.log(res);
+              setpermissionsdata(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (getCookie("token") === null) {
@@ -36,11 +66,17 @@ function Homepage() {
       <Navbar
         expiredSession={expiredSession}
         setshowchangepasswordform={setshowchangepasswordform}
+        userData={userData}
       />
       <section className="inside-homepage">
         <Sidebar />
         <triggerscroll.Provider
-          value={{ triggerscrollupwords, setExpiredSession }}
+          value={{
+            triggerscrollupwords,
+            setExpiredSession,
+            permissionsdata,
+            userData,
+          }}
         >
           <section className="inside-homepage-content" ref={insidehomepageref}>
             <Outlet />
