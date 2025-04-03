@@ -1,10 +1,31 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function RolesTable({
   setshowaddroleform,
   showaddroleform,
   setshowdetailsroletable,
+  setrole,
+  refresh,
 }) {
+  const [allpermissions, setallpermissions] = useState([]);
+
+  useEffect(() => {
+    const url = `${process.env.REACT_APP_API_URL}/api/Permissions`;
+    axios
+      .get(url)
+      .then((res) => {
+        console.log(res.data);
+        setallpermissions(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [refresh]);
+
+  const seenRoles = new Set();
+  let i = 1;
+
   return (
     <section className="table" style={{ width: "70%", margin: "0 auto" }}>
       {showaddroleform === false && (
@@ -26,41 +47,31 @@ function RolesTable({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Service-Co-Ordinator</td>
-            <td>
-              <a
-                href="#"
-                onClick={() => {
-                  setshowdetailsroletable(true);
-                }}
-              >
-                Click to See More
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Store Manager</td>
-            <td>
-              <a href="#">Click to See More</a>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Purchase Manager</td>
-            <td>
-              <a href="#">Click to See More</a>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Technician</td>
-            <td>
-              <a href="#">Click to See More</a>
-            </td>
-          </tr>
+          {allpermissions.map((permission) => {
+            if (seenRoles.has(permission.role)) {
+              return null;
+            }
+
+            seenRoles.add(permission.role);
+
+            return (
+              <tr key={permission.id}>
+                <td>{i++}</td>
+                <td>{permission.role}</td>
+                <td>
+                  <a
+                    href="#"
+                    onClick={() => {
+                      setshowdetailsroletable(true);
+                      setrole(permission.role);
+                    }}
+                  >
+                    Click to See More
+                  </a>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

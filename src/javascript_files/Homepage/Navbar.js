@@ -4,11 +4,13 @@ import "../../css_files/Homepage/Navbar.css";
 import { jwtDecode } from "jwt-decode";
 import getCookie from "../../api";
 import axios from "axios";
+import DetailsRoleTable from "../Admin/DetailsRoleTable";
 
 function Navbar({ expiredSession, setshowchangepasswordform }) {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const detailref = useRef();
+  const [detailsrole, setdetailsrole] = useState(false);
 
   useEffect(() => {
     if (getCookie("token")) {
@@ -157,6 +159,19 @@ function Navbar({ expiredSession, setshowchangepasswordform }) {
                           <b>Lockout End:</b> {userData.lockoutEnd}
                         </p>
                       </blockquote>
+                      <blockquote>
+                        <p
+                          style={{
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            setdetailsrole(true);
+                          }}
+                        >
+                          <b>View Your Permissions</b>
+                        </p>
+                      </blockquote>
                     </>
                   )}
 
@@ -185,6 +200,13 @@ function Navbar({ expiredSession, setshowchangepasswordform }) {
           </button>
         </div>
       </nav>
+      {detailsrole && (
+        <DetailsRoleTable
+          setshowdetailsroletable={setdetailsrole}
+          role={userData.role}
+          isAdmin={false}
+        />
+      )}
     </>
   );
 }

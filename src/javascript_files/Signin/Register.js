@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../css_files/Signin/Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -23,6 +23,7 @@ function Register({
     Role: triggerupdate ? fetchuserdata?.role : "",
   });
   const [loading, setloading] = useState(false);
+  const [roles, setroles] = useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -72,6 +73,21 @@ function Register({
         });
     }
   }
+
+  useEffect(() => {
+    setroles([]);
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/api/Permissions`)
+      .then((res) => {
+        console.log(res);
+        for (let i = 0; i < res.data.length; i++) {
+          setroles((prev) => [...prev, res.data[i].role]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <section className="register">
       <form onSubmit={handleSubmit}>
@@ -118,27 +134,11 @@ function Register({
             disabled={triggerupdate}
           >
             <option value="">Select Role Name</option>
-            <option
-              value="Service-Co-Ordinator"
-              selected={data.Role === "Service-Co-Ordinator"}
-            >
-              Service-Co-Ordinator
-            </option>
-            <option
-              value="Store Manager"
-              selected={data.Role === "Store Manager"}
-            >
-              Store Manager
-            </option>
-            <option
-              value="Purchase Manager"
-              selected={data.Role === "Purchase Manager"}
-            >
-              Purchase Manager
-            </option>
-            <option value="Technician" selected={data.Role === "Technician"}>
-              Technician
-            </option>
+            {roles.map((role, index) => (
+              <option key={index} selected={data.Role === role}>
+                {role}
+              </option>
+            ))}
           </select>
         </blockquote>
 
