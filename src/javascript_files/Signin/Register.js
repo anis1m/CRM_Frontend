@@ -80,9 +80,11 @@ function Register({
       .get(`${process.env.REACT_APP_API_URL}/api/Permissions`)
       .then((res) => {
         console.log(res);
+        const rolenames = new Set();
         for (let i = 0; i < res.data.length; i++) {
-          setroles((prev) => [...prev, res.data[i].role]);
+          rolenames.add(res.data[i].role);
         }
+        setroles(Array.from(rolenames));
       })
       .catch((err) => {
         console.log(err);
